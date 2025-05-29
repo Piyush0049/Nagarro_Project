@@ -6,8 +6,7 @@ import {
   addAddress,
   getAddress,
 } from "../controllers/user.controller.js";
-import isAuthenticated from "../middlewares/auth.middleware.js";
-
+import isAuthenticated from "../middleware/isAuthenticated.js";
 const router = express.Router();
 
 

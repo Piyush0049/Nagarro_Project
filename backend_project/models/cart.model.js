@@ -28,7 +28,7 @@ const foodCartSchema = new mongoose.Schema({
   },
 });
 
-cartSchema.pre('save', function(next) {
+foodCartSchema.pre('save', function(next) {
   this.updatedAt = Date.now();
   next();
 });

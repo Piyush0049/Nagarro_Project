@@ -2,9 +2,9 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
-import userRoute from "./routes/user.route.js"
-import itemRoute from "./routes/item.route.js"
-import cartRoute from "./routes/cart.route.js"
+import userRoute from "./routes/user.routes.js"
+import itemRoute from "./routes/item.routes.js"
+import cartRoute from "./routes/cart.routes.js"
 
 
 dotenv.config();

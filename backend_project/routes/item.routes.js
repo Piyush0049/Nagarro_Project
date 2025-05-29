@@ -7,7 +7,7 @@ import {
   addItem,
   addToCart,
 } from "../controllers/item.controller.js";
-import isAuthenticated from "../middlewares/auth.middleware.js";
+import isAuthenticated from "../middleware/isAuthenticated.js";
 
 const router = express.Router();
 
