@@ -115,3 +115,65 @@ export const getItemsByTagAndCategory = async (req, res) => {
   }
 };
 
+export const addItem = async (req, res) => {
+  try {
+    let { name, itemImageURL, itemPrice, timeToDeliver, category, productTag } = req.body;
+
+    if (!name || !itemImageURL || !itemPrice || !timeToDeliver) {
+      return res.status(400).json({
+        message: "Missing required fields: name, itemImageURL, itemPrice, or timeToDeliver",
+        success: false,
+      });
+    }
+
+
+    category = category
+      ? category.split(",").map(cat => cat.trim().toLowerCase()).filter(Boolean)
+      : [];
+    productTag = productTag
+      ? productTag.split(",").map(tag => tag.trim().toLowerCase()).filter(Boolean)
+      : [];
+
+
+    const allowedCategories = ['vegetarian', 'vegan', 'glutenfree'];
+    const allowedTags = ['salads', 'bowls', 'wraps', 'plates', 'drinks'];
+
+
+    const invalidCategories = category.filter(cat => !allowedCategories.includes(cat));
+    if (invalidCategories.length > 0) {
+      return res.status(400).json({
+        message: `Invalid category values: ${invalidCategories.join(", ")}`,
+        success: false,
+      });
+    }
+
+    const invalidTags = productTag.filter(tag => !allowedTags.includes(tag));
+    if (invalidTags.length > 0) {
+      return res.status(400).json({
+        message: `Invalid productTag values: ${invalidTags.join(", ")}`,
+        success: false,
+      });
+    }
+
+    const newItem = await FoodItem.create({
+      name: name.trim(),
+      itemImageURL: itemImageURL.trim(),
+      itemPrice,
+      timeToDeliver,
+      category,
+      productTag,
+    });
+
+    return res.status(201).json({
+      message: "Item added successfully",
+      success: true,
+      data: newItem,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
