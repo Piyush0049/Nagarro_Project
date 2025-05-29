@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
-const orderSchema = new mongoose.Schema({
+const foodOrderSchema = new mongoose.Schema({
     timeOfOrder: {
         type: Date,
         default: Date.now,
     },
     orderItems: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Item"
+        ref: "FoodItem"
     }],
     totalValue: {
         type: Number,
@@ -17,6 +17,6 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         default: 0
     }
-});
+}, { timestamps: true });
 
-export const Order = mongoose.model("Order", orderSchema);
+export const FoodOrder = mongoose.model("FoodOrder", foodOrderSchema);

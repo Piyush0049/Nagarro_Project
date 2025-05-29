@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const foodUserSchema = new mongoose.Schema({
     userName: {
         type: String,
         required: true,
@@ -19,9 +19,10 @@ const userSchema = new mongoose.Schema({
         type : String,
         required : true
     },
-    address: {
-        type: String,
-    },
+    address: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref : 'FoodUserAddress',
+    }],
     status: {
         type: String,
         enum: ["Newbie", "Elite", "Titan", "Legendary"], 
@@ -34,8 +35,8 @@ const userSchema = new mongoose.Schema({
     },
     orderHistory: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Order', 
+        ref: 'FoodOrder', 
     }]
 });
 
-export const User = mongoose.model("User", userSchema);
+export const FoodUser = mongoose.model("FoodUser", foodUserSchema);
