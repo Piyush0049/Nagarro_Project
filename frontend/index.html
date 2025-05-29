@@ -1,13 +1,46 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>EcoBite Foods - Delicious & Sustainable Meals</title>
+    <meta name="description" content="EcoBite Foods: Enjoy handcrafted organic meals delivered sustainably. Browse our menu of salads, bowls, wraps, and smoothies." />
+    <meta name="keywords" content="organic food, sustainable meals, vegan, vegetarian, healthy delivery" />
+    <meta name="author" content="EcoBite Foods" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="EcoBite Foods - Delicious & Sustainable Meals" />
+    <meta property="og:description" content="Browse our handcrafted organic menu and enjoy eco-friendly delivery options at EcoBite Foods." />
+    <meta property="og:image" content="/assets/og-image.png" />
+    <meta property="og:url" content="https://www.ecobitefoods.com" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="EcoBite Foods - Delicious & Sustainable Meals" />
+    <meta name="twitter:description" content="Browse our handcrafted organic menu and enjoy eco-friendly delivery options at EcoBite Foods." />
+    <meta name="twitter:image" content="/assets/og-image.png" />
+    
+    <!-- Favicon & Touch Icons -->
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#10B981" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet" />
+
+    <!-- CSS Reset & Tailwind -->
+    <link rel="stylesheet" href="/src/index.css" />
   </head>
-  <body>
-    <div id="root"></div>
+  <body class="antialiased font-poppins bg-white text-gray-900">
+    <div id="root" class="min-h-screen flex flex-col"></div>
+    
+    <!-- Vite + React Entry -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
