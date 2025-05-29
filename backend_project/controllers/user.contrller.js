@@ -1,6 +1,7 @@
-import { User } from "../models/user.model.js";
+import { FoodUser } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { FoodUserAddress } from "../models/address.model.js";
 
 
 export const register = async (req, res) => {
@@ -14,7 +15,7 @@ export const register = async (req, res) => {
       });
     }
 
-    const existingUser = await User.findOne({
+    const existingUser = await FoodUser.findOne({
       $or: [{ email }, { phoneNumber }],
     });
 
@@ -27,7 +28,7 @@ export const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await User.create({
+    await FoodUser.create({
       userName,
       email,
       phoneNumber,
@@ -58,7 +59,7 @@ export const login = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email });
+    const user = await FoodUser.findOne({ email });
 
     if (!user) {
       return res.status(400).json({
@@ -103,4 +104,60 @@ export const login = async (req, res) => {
     });
   }
 };
+
+export const logout = async (req, res) => {
+    try {
+        return res.status(200).cookie("token", "", { maxAge: 0 }).json({
+            message: "logged out successfully",
+            success: true
+        })
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const addAddress = async (req, res)=>{
+  try{
+    const {streetAddress, locality, city, state, postalCode } = req.body;
+    if(!streetAddress || !locality || !city || !state || !postalCode){
+      return res.status(400).json({
+        message : "missing required field data",
+        success : false,
+      })
+    }
+    const addressObject = await FoodUserAddress.create({
+      streetAddress,
+      locality,
+      city,
+      state,
+      postalCode
+    })
+
+    const userId = req.id;
+    const user = FoodUser.findById(userId);
+
+    if(!user) return res.status(400).json({
+      message : "User not found",
+      success : false
+    })
+
+    user.address.push(addressObject._id);
+    await user.save();
+
+    const updatedUser = await FoodUser.findById(userId).populate("address");
+
+    return res.status(200).json({
+      message: "Address added successfully",
+      success: true,
+      user: updatedUser
+    });
+  
+  }catch(e){
+    console.error(e);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+}
 
