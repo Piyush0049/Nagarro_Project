@@ -25,9 +25,9 @@ const foodUserSchema = new mongoose.Schema({
     }],
     status: {
         type: String,
-        enum: ["Newbie", "Elite", "Titan", "Legendary"], 
+        enum: ["newbie", "elite", "titan", "legendary"], 
         required: true,
-        default: "Newbie",
+        default: "newbie",
     },
     totalScore: {
         type: Number,
