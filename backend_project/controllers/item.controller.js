@@ -1,3 +1,4 @@
+import { FoodCart } from "../models/cart.model";
 import { FoodItem } from "../models/item.model"
 
 export const getItem = async (req, res)=>{
@@ -171,6 +172,69 @@ export const addItem = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+export const addToCart = async (req, res) => {
+  try {
+    const userId = req.id; // Assuming user ID is in req.id (from auth middleware)
+    const { productId, quantity } = req.body;
+
+    if (!productId || !quantity || quantity < 1) {
+      return res.status(400).json({
+        message: "Product ID and a valid quantity are required",
+        success: false,
+      });
+    }
+
+    // Verify product exists
+    const product = await FoodItem.findById(productId);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+        success: false,
+      });
+    }
+
+
+    let cart = await FoodCart.findOne({ user: userId });
+
+    if (!cart) {
+
+      cart = new FoodCart({
+        user: userId,
+        items: [{ product: productId, quantity }],
+      });
+    } else {
+
+      const itemIndex = cart.items.findIndex(
+        (item) => item.product.toString() === productId
+      );
+
+      if (itemIndex > -1) {
+
+        cart.items[itemIndex].quantity += quantity;
+      } else {
+
+        cart.items.push({ product: productId, quantity });
+      }
+    }
+
+    await cart.save();
+
+    const populatedCart = await cart.populate("items.product");
+
+    return res.status(200).json({
+      message: "Item added to cart successfully",
+      success: true,
+      cart: populatedCart,
+    });
+  } catch (e) {
+    console.error(e);
     return res.status(500).json({
       message: "Internal server error",
       success: false,
