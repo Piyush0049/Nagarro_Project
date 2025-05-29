@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const itemSchema = new mongoose.Schema({
+const foodItemSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -20,11 +20,13 @@ const itemSchema = new mongoose.Schema({
         required : true,
     },
     category : [{
-        type : String
+        type : String,
+        enum : ['vegetarian', 'vegan', 'glutenfree']
     }],
     productTag : [{
-        type : String
+        type : String,
+        enum : ['salads', 'bowls', 'wraps', 'plates', 'drinks']
     }]
 });
 
-export const Item = mongoose.model("Item", itemSchema);
+export const FoodItem = mongoose.model("FoodItem", foodItemSchema);
