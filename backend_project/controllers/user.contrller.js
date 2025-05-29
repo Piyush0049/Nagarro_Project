@@ -2,6 +2,7 @@ import { FoodUser } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { FoodUserAddress } from "../models/address.model.js";
+import { FoodOrder } from "../models/order.model.js";
 
 
 export const register = async (req, res) => {
@@ -134,7 +135,7 @@ export const addAddress = async (req, res)=>{
     })
 
     const userId = req.id;
-    const user = FoodUser.findById(userId);
+    const user = await FoodUser.findById(userId);
 
     if(!user) return res.status(400).json({
       message : "User not found",
@@ -152,6 +153,48 @@ export const addAddress = async (req, res)=>{
       user: updatedUser
     });
   
+  }catch(e){
+    console.error(e);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+}
+
+export const placeOrder = async (req,res)=>{
+  try{
+    const {orderItems, totalValue, totalPoints} = req.body;
+    if(!orderItems || !totalValue) return res.status(400).json({
+      message: "missing required data",
+      success : false
+    })
+    let itemArr;
+    if (orderItems) itemArr = orderItems.split(",").map(item => item.trim());
+
+    const order = await FoodOrder.create({
+      orderItems : itemArr,
+      totalValue,
+      totalPoints : (!totalPoints) ? 0 : totalPoints,
+    })
+    const userId = req.id
+    const user = await FoodUser.findById(userId)
+
+    if(!user) return res.status(400).json({
+      message : "User not found",
+      success : false
+    })
+
+    user.orderHistory.push(order._id)
+    await user.save()
+
+    const updatedUser = await FoodUser.findById(userId).populate("orderHistory");
+    return res.status(200).json({
+      message: "Order placed successfully",
+      success: true,
+      user: updatedUser
+    });
+
   }catch(e){
     console.error(e);
     return res.status(500).json({

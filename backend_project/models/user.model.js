@@ -21,7 +21,7 @@ const foodUserSchema = new mongoose.Schema({
     },
     address: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref : FoodUserAddress,
+        ref : 'FoodUserAddress',
     }],
     status: {
         type: String,
@@ -35,7 +35,7 @@ const foodUserSchema = new mongoose.Schema({
     },
     orderHistory: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Order', 
+        ref: 'FoodOrder', 
     }]
 });
 
